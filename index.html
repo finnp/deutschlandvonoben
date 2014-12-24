@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>Deutschland von Oben</title>
+  <style>
+  html, body, #map-canvas {
+    height: 100%;
+    margin: 0px;
+    padding: 0px
+  }
+  #text {
+    position: absolute; 
+    top:30%; 
+    left: 30%; 
+    font-size: 8em; 
+    font-family: Arial; 
+    color:rgba(200,200,200,0.5)
+  }
+  </style>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+  <script>
+  function initialize() {
+    var mapOptions = {
+      zoom: 4,
+      center: new google.maps.LatLng(52.5167, 13.3833),
+      disableDefaultUI: true,
+      mapTypeId: google.maps.MapTypeId.SATELLITE,
+      draggable: false,
+      disableDoubleClickZoom: true,
+      scrollwheel: false
+    }
+    
+    var cities = [
+  {name: 'Berlin', pos: new google.maps.LatLng(52.5167, 13.3833)},
+{name: 'Hamburg', pos: new google.maps.LatLng(53.5653, 10.0014)},
+{name: 'München', pos: new google.maps.LatLng(48.140, 11.580)},
+{name: 'Köln', pos: new google.maps.LatLng(50.950, 6.970)},
+{name: 'Frankfurt', pos: new google.maps.LatLng(50.120, 8.680)},
+{name: 'Stuttgart', pos: new google.maps.LatLng(48.790, 9.190)},
+{name: 'Heidelberg', pos: new google.maps.LatLng(49.420,8.690)},
+{name: 'Ludwigshafen', pos: new google.maps.LatLng(49.480, 8.440)},
+{name: 'Elbsandstein', pos: new google.maps.LatLng(50.962222, 14.071389)},
+{name: 'Schwarzwald', pos: new google.maps.LatLng(48.3, 8.15)},
+{name: 'Reutlingen', pos: new google.maps.LatLng(48.4730403,9.1786244)}
+    ]
+    
+    function randomCity() {
+      var city = cities[Math.round(Math.random()*cities.length)]
+      map.setCenter(city.pos)
+      document.querySelector('#text').innerText = city.name
+      var zoom = 11 + Math.round(Math.random() * 7)
+      console.log(zoom)
+      map.setZoom(zoom)
+    }
+    
+    
+    var directions = [
+      [1, 1],
+      [-1, 1],
+      [1, 1],
+      [1, -1]
+    ]
+    
+    var speed = 2
+    
+    var map = new google.maps.Map(document.getElementById('map-canvas'),
+    mapOptions)
+    
+    randomCity()
+
+
+    var direction = 0
+    setInterval(function () {
+      map.panBy.apply(map, directions[direction].map(function(a) { return a * speed}))
+    }, 100)
+    setInterval(function () {
+      direction = (direction + 1) % 3
+    }, 4000)
+    setInterval(function () {
+      randomCity()
+    }, 8000)
+  }
+  
+  google.maps.event.addDomListener(window, 'load', initialize);
+  
+  </script>
+</head>
+<body>
+  <div id="map-canvas"></div>
+  <div id="text"></div>
+  <audio src="music.m4a" autoplay loop></audio>
+</body>
+</html>
